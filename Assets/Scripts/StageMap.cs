@@ -10,6 +10,7 @@ public class StageMap : MonoBehaviour
     private List<Tilemap> colliderMaps;
     private Tilemap primaryMap;
     private Tilemap unitsMap;
+    public List<Unit> units;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,9 +27,19 @@ public class StageMap : MonoBehaviour
         Debug.Log(TileHasObstacle(new Vector2Int(-1, 0))); 
 
         Debug.Log("okay!");
-
+        units = collectUnits();
     }
 
+    public List<Unit> collectUnits() {
+        List<Unit> unitList = new List<Unit>();
+        Unit[] unitsCollected = transform.GetComponentsInChildren<Unit>();
+        foreach(Unit u in unitsCollected)
+        {
+            Debug.Log(u);
+            unitList.Add(u);
+        }
+        return unitList;
+    }
     // Update is called once per frame
     void Update()
     {
