@@ -9,11 +9,13 @@ public class StageMap : MonoBehaviour
     private Grid grid;
     private List<Tilemap> colliderMaps;
     private Tilemap primaryMap;
+    private Tilemap unitsMap;
     // Start is called before the first frame update
     void Start()
     {
         grid = gameObject.GetComponent<Grid>();
         primaryMap = transform.Find("primary").GetComponent<Tilemap>();
+        unitsMap = transform.Find("StartingPos").GetComponent<Tilemap>();
         colliderMaps = gameObject.GetComponentsInChildren<Transform>()
             .Where( x => x.CompareTag("Collidable"))
             .Select( x => x.GetComponent<Tilemap>())
@@ -47,5 +49,12 @@ public class StageMap : MonoBehaviour
         var worldPosition = grid.CellToLocal(coords3);
 
         return tilemap.GetTile<Tile>(tilemap.LocalToCell(coords3));
+    }
+
+    private void LoadUnits()
+    {
+        // get all the units in the `unitsMap`
+        // iterate over the tiles that have a unit in them
+        // 
     }
 }
