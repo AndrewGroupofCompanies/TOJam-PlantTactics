@@ -9,22 +9,23 @@ public class StageMap : MonoBehaviour
     private Grid grid;
     private List<Tilemap> colliderMaps;
     private Tilemap primaryMap;
-    private Tilemap unitsMap;
     public List<Unit> units;
+    private List<HighlitTile> highlitTiles;
+    public HighlitTile tilePrefab;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        highlitTiles = new List<HighlitTile>();
         grid = gameObject.GetComponent<Grid>();
         primaryMap = transform.Find("primary").GetComponent<Tilemap>();
-        unitsMap = transform.Find("StartingPos").GetComponent<Tilemap>();
         colliderMaps = gameObject.GetComponentsInChildren<Transform>()
             .Where( x => x.CompareTag("Collidable"))
             .Select( x => x.GetComponent<Tilemap>())
             .ToList();
 
-        Debug.Log(TileHasObstacle(new Vector2Int(2, 2))); // false
-        Debug.Log(TileHasObstacle(new Vector2Int(5, 2))); 
-        Debug.Log(TileHasObstacle(new Vector2Int(-1, 0))); 
+    }
+    void Start()
+    {
 
         Debug.Log("okay!");
         units = collectUnits();
@@ -48,6 +49,9 @@ public class StageMap : MonoBehaviour
 
     public bool TileHasObstacle(Vector2Int coords)
     {
+        Debug.Log(colliderMaps);
+        Debug.Log(coords);
+
         return colliderMaps
             .Select( map => map.GetTile(new Vector3Int(coords.x, coords.y, 0)) )
             .Any( tile => tile );
@@ -67,5 +71,29 @@ public class StageMap : MonoBehaviour
         // get all the units in the `unitsMap`
         // iterate over the tiles that have a unit in them
         // 
+    }
+
+    public void HighlightTiles(List<Vector2Int> tiles) {
+        tiles.ForEach(tile => HighlightTile(tile));
+    }
+
+    private void HighlightTile(Vector2Int tile) {
+        HighlitTile t = Instantiate(tilePrefab, new Vector3(tile.x + 0.5f, tile.y + 0.5f, 0), Quaternion.identity);
+        highlitTiles.Add(t);
+    }
+
+    private void ClearHighlights() {
+        highlitTiles.ForEach(tile => Destroy(tile));
+    }
+
+    public List<Vector2Int> GetNeighbours(Vector2Int coords) {
+        var returnList = new List<Vector2Int>();
+
+        returnList.Add(new Vector2Int(coords.x - 1, coords.y));
+        returnList.Add(new Vector2Int(coords.x + 1, coords.y));
+        returnList.Add(new Vector2Int(coords.x, coords.y - 1));
+        returnList.Add(new Vector2Int(coords.x, coords.y + 1));
+
+        return returnList;
     }
 }
