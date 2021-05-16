@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    private Player belongsTo;
+
     private Vector2Int coords = new Vector2Int(0, 0);
     private Vector2Int destination;
 
@@ -52,7 +54,7 @@ public class Unit : MonoBehaviour
     }
 
     public bool BelongsTo(Player player) {
-        return false;
+        return belongsTo == player;
     }
 
     public bool IsSelectable() {

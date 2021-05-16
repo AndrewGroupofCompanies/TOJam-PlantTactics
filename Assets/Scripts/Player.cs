@@ -10,6 +10,9 @@ public class Player : MonoBehaviour {
 	protected List<Player> enemies;
 	protected List<Player> allies;
 
+	private Unit selectedUnit;
+	private List<Unit> unitQueue;
+
 	void Awake () {
 		myUnits = new List<Unit>();
 	}
@@ -68,9 +71,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void WakeMyUnits () {
-		foreach (Unit unit in GetUnits()) {
-			unit.WakeUp();
-		}
+		unitQueue.AddRange(GetUnits());
 	}
 
 	public void ExhaustMyUnits () {
@@ -129,5 +130,13 @@ public class Player : MonoBehaviour {
 		return myUnits.FindAll(
 			x => x.IsSelectable()
 		);
+	}
+
+	public Unit GetSelectedUnit() {
+		return selectedUnit;
+	}
+
+	public void SelectUnit(Unit unit){
+		selectedUnit = unit;
 	}
 }
